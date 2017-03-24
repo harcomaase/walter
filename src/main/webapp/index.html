@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>testpage</title>
+        <style>
+            body {
+                font-family: Sans-Serif;
+            }
+            table, td, th {
+                border: 1px solid grey;
+            }
+            .tasklist {
+                float:left;
+                margin: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <div id="greeting" style="margin-bottom: 10px;">
+                hi
+                <span id="greeting_name"></span>
+            </div>
+
+            <div id="newTasklist_area">
+                <form onsubmit="return false;">
+                    <input type="text" id="input_newTasklistName" />
+                    <button type="submit" onclick="createNewTasklist();">create new tasklist</button>
+                    |
+                    <button type="button" onclick="showDoneHistory();">history</button>
+                </form>
+            </div>
+            <hr />
+
+            <div id="newTask_area">
+                <form onsubmit="return false;">
+                    <select id="select_newTask">
+                    </select>
+                    <input type="text" id="input_newTaskText" />
+                    <button type="submit" onclick="createNewTask();">add to tasklist</button>
+                </form>
+                <hr />
+            </div>
+
+            <div id="tasklist_area">
+
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var REST_OVERVIEW = 'overview';
+            var REST_CREATE_TASKLIST = 'create_list';
+            var REST_CREATE_TASK = 'create_task';
+            var REST_MARK_TASK_DONE = 'mark_task_done';
+            var REST_UNMARK_TASK_DONE = 'unmark_task_done';
+            var REST_DONE_HISTORY = 'done_history';
+            var overview;
+
+            initUser();
+            showStuff();
+
+            function initUser() {
+                var storage = window.localStorage;
+                var key = storage.getItem('key');
+                if(key) {
+                    //verify key
+                }
+                var user = prompt('user:');
+                var password = prompt('password:');
+                //request key
+            }
+
+            function showStuff() {
+                updateOverview();
+                updateInputArea();
+            }
+
+            function showDoneHistory() {
+                var history = JSON.parse(httpGet(REST_DONE_HISTORY));
+                var tasks = [];
+                for (var i = 0; i < history.taskLists.length; i += 1) {
+                    var taskList = history.taskLists[i];
+                    for (var n = 0; n < taskList.tasks.length; n += 1) {
+                        var task = taskList.tasks[n];
+                        task.taskList = taskList;
+                        tasks.push(task);
+                    }
+                }
+                tasks.sort(function (t1, t2) {
+                    return t2.doneAt - t1.doneAt;
+                });
+                var text = '';
+                for (var n = 0; n < tasks.length; n += 1) {
+                    var task = tasks[n];
+                    text += new Date(task.doneAt).toLocaleString() + ', [' + taskList.name + '] ' + task.text + '\n';
+                }
+                alert(text);
+            }
+
+            function toggleTaskDone(task) {
+                var data = {'taskId': task.id};
+
+                var url = task.done ? REST_UNMARK_TASK_DONE : REST_MARK_TASK_DONE;
+
+                var result = httpPost(url, data);
+                if (result !== 'OK') {
+                    alert(result);
+                }
+                updateOverview();
+            }
+
+            function createNewTasklist() {
+                var inputNode = byId('input_newTasklistName');
+                var taskListName = inputNode.value;
+                var data = {'name': taskListName};
+
+                var result = httpPost(REST_CREATE_TASKLIST, data);
+                if (result === 'OK') {
+                    inputNode.value = '';
+                } else {
+                    alert(result);
+                }
+                showStuff();
+            }
+
+            function createNewTask() {
+                var inputNode = byId('input_newTaskText');
+                var text = inputNode.value;
+                var taskListId = byId('select_newTask').value;
+                var data = {'taskListId': taskListId, 'text': text};
+
+                var result = httpPost(REST_CREATE_TASK, data);
+                if (result === 'OK') {
+                    inputNode.value = '';
+                } else {
+                    alert(result);
+                }
+                updateOverview();
+            }
+
+            function updateInputArea() {
+                var newTaskArea = byId('newTask_area');
+                if (overview.taskLists.length === 0) {
+                    newTaskArea.style.display = 'none';
+                    return;
+                }
+
+                var selectBox = byId('select_newTask');
+                clearNode(selectBox);
+                for (var i = 0; i < overview.taskLists.length; i += 1) {
+                    var taskList = overview.taskLists[i];
+                    var opt = document.createElement('option');
+                    opt.value = taskList.id;
+                    opt.innerHTML = taskList.name;
+                    selectBox.appendChild(opt);
+                }
+
+                newTaskArea.style.display = null;
+            }
+
+            function updateOverview() {
+                overview = JSON.parse(httpGet(REST_OVERVIEW));
+                byId('greeting_name').textContent = overview.userEmail;
+
+                var tasklistArea = byId('tasklist_area');
+                clearNode(tasklistArea);
+                for (var i = 0; i < overview.taskLists.length; i += 1) {
+                    var taskList = overview.taskLists[i];
+                    var table = document.createElement('table');
+                    table.classList.add('tasklist');
+                    tasklistArea.appendChild(table);
+                    var tableHeadRow = document.createElement('tr');
+                    var tableHeadColumn = document.createElement('th');
+                    table.appendChild(tableHeadRow);
+                    tableHeadRow.appendChild(tableHeadColumn);
+                    tableHeadColumn.textContent = taskList.name;
+                    for (var n = 0; n < taskList.tasks.length; n += 1) {
+                        var task = taskList.tasks[n];
+                        var tableRow = document.createElement('tr');
+                        var tableColumn = document.createElement('td');
+                        table.appendChild(tableRow);
+                        tableRow.appendChild(tableColumn);
+                        tableColumn.textContent = task.text;
+                        tableColumn.onclick = (function (t) {
+                            return function () {
+                                toggleTaskDone(t);
+                            };
+                        }(task));
+                        if (task.done) {
+                            tableColumn.style.textDecoration = 'line-through';
+                            tableColumn.title = 'done @ ' + new Date(task.doneAt).toLocaleString();
+                        }
+                    }
+                }
+            }
+
+            function httpGet(url) {
+                var request = new XMLHttpRequest();
+                request.open('GET', url, false);
+                request.send();
+                return request.responseText;
+            }
+
+            function httpPost(url, data) {
+                var request = new XMLHttpRequest();
+                request.open('POST', url, false);
+                request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                request.send(JSON.stringify(data));
+                return request.responseText;
+            }
+
+            function byId(e) {
+                return document.getElementById(e);
+            }
+
+            function clearNode(node) {
+                while (node.firstChild) {
+                    node.removeChild(node.firstChild);
+                }
+            }
+        </script>
+    </body>
+</html>

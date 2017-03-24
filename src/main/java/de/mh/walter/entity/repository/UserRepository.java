@@ -1,6 +1,6 @@
-package de.mh.lists.entity.repository;
+package de.mh.walter.entity.repository;
 
-import de.mh.lists.entity.User;
+import de.mh.walter.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 public interface UserRepository extends CrudRepository<User, Long> {

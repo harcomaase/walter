@@ -1,4 +1,4 @@
-package de.mh.lists.boundary.bean;
+package de.mh.walter.boundary.bean;
 
 public class KeyValidRequest {
 

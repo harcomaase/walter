@@ -1,11 +1,11 @@
-package de.mh.lists.control;
+package de.mh.walter.control;
 
-import de.mh.lists.entity.Task;
-import de.mh.lists.entity.TaskList;
-import de.mh.lists.entity.User;
-import de.mh.lists.entity.dao.TaskDao;
-import de.mh.lists.entity.dao.TaskListDao;
-import de.mh.lists.entity.dao.UserDao;
+import de.mh.walter.entity.Task;
+import de.mh.walter.entity.TaskList;
+import de.mh.walter.entity.User;
+import de.mh.walter.entity.dao.TaskDao;
+import de.mh.walter.entity.dao.TaskListDao;
+import de.mh.walter.entity.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

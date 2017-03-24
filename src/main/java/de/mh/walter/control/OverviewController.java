@@ -1,12 +1,12 @@
-package de.mh.lists.control;
+package de.mh.walter.control;
 
-import de.mh.lists.boundary.bean.UserOverview;
-import de.mh.lists.entity.Task;
-import de.mh.lists.entity.TaskList;
-import de.mh.lists.entity.User;
-import de.mh.lists.entity.dao.TaskDao;
-import de.mh.lists.entity.dao.TaskListDao;
-import de.mh.lists.entity.dao.UserDao;
+import de.mh.walter.boundary.bean.UserOverview;
+import de.mh.walter.entity.Task;
+import de.mh.walter.entity.TaskList;
+import de.mh.walter.entity.User;
+import de.mh.walter.entity.dao.TaskDao;
+import de.mh.walter.entity.dao.TaskListDao;
+import de.mh.walter.entity.dao.UserDao;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;

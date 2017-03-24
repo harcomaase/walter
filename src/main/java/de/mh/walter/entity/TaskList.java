@@ -1,4 +1,4 @@
-package de.mh.lists.entity;
+package de.mh.walter.entity;
 
 import java.util.List;
 import javax.persistence.Entity;

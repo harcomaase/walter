@@ -1,6 +1,6 @@
-package de.mh.lists.entity.repository;
+package de.mh.walter.entity.repository;
 
-import de.mh.lists.entity.TaskList;
+import de.mh.walter.entity.TaskList;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 

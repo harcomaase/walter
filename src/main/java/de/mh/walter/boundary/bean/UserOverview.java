@@ -1,6 +1,6 @@
-package de.mh.lists.boundary.bean;
+package de.mh.walter.boundary.bean;
 
-import de.mh.lists.entity.TaskList;
+import de.mh.walter.entity.TaskList;
 import java.util.List;
 
 public class UserOverview {

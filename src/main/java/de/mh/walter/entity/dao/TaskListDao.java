@@ -1,7 +1,7 @@
-package de.mh.lists.entity.dao;
+package de.mh.walter.entity.dao;
 
-import de.mh.lists.entity.TaskList;
-import de.mh.lists.entity.repository.TaskListRepository;
+import de.mh.walter.entity.TaskList;
+import de.mh.walter.entity.repository.TaskListRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

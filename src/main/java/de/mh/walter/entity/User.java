@@ -1,4 +1,4 @@
-package de.mh.lists.entity;
+package de.mh.walter.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

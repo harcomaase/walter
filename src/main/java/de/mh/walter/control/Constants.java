@@ -1,4 +1,4 @@
-package de.mh.lists.control;
+package de.mh.walter.control;
 
 import java.time.Duration;
 

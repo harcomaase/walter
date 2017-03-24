@@ -1,4 +1,4 @@
-package de.mh.lists;
+package de.mh.walter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

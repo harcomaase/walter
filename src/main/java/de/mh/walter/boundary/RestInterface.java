@@ -1,15 +1,15 @@
-package de.mh.lists.boundary;
+package de.mh.walter.boundary;
 
-import de.mh.lists.boundary.bean.CreateTaskRequest;
-import de.mh.lists.boundary.bean.CreateTaskListRequest;
-import de.mh.lists.boundary.bean.KeyValidRequest;
-import de.mh.lists.boundary.bean.KeyValidResponse;
-import de.mh.lists.boundary.bean.LoginRequest;
-import de.mh.lists.boundary.bean.LoginResponse;
-import de.mh.lists.boundary.bean.MarkTaskDoneRequest;
-import de.mh.lists.boundary.bean.UserOverview;
-import de.mh.lists.control.OverviewController;
-import de.mh.lists.control.TaskListManipulator;
+import de.mh.walter.boundary.bean.CreateTaskRequest;
+import de.mh.walter.boundary.bean.CreateTaskListRequest;
+import de.mh.walter.boundary.bean.KeyValidRequest;
+import de.mh.walter.boundary.bean.KeyValidResponse;
+import de.mh.walter.boundary.bean.LoginRequest;
+import de.mh.walter.boundary.bean.LoginResponse;
+import de.mh.walter.boundary.bean.MarkTaskDoneRequest;
+import de.mh.walter.boundary.bean.UserOverview;
+import de.mh.walter.control.OverviewController;
+import de.mh.walter.control.TaskListManipulator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

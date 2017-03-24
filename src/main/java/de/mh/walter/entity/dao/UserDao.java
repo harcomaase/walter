@@ -1,7 +1,7 @@
-package de.mh.lists.entity.dao;
+package de.mh.walter.entity.dao;
 
-import de.mh.lists.entity.User;
-import de.mh.lists.entity.repository.UserRepository;
+import de.mh.walter.entity.User;
+import de.mh.walter.entity.repository.UserRepository;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

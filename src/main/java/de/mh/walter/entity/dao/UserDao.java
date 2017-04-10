@@ -17,6 +17,22 @@ public class UserDao {
         return userRepository.findOne(userId);
     }
 
+    public User findByUsername(String username) {
+        return userRepository.findByEmail(username);
+    }
+
+    public void create(User user) {
+        userRepository.save(user);
+    }
+
+    public void update(User user) {
+        userRepository.save(user);
+    }
+
+    public User findByKey(String key) {
+        return userRepository.findByAuthenticationKey(key);
+    }
+
     public List<User> findAll() {
         List<User> result = new LinkedList<>();
         userRepository.findAll().forEach(result::add);

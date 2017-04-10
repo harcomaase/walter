@@ -2,10 +2,6 @@ package de.mh.walter.boundary;
 
 import de.mh.walter.boundary.bean.CreateTaskRequest;
 import de.mh.walter.boundary.bean.CreateTaskListRequest;
-import de.mh.walter.boundary.bean.KeyValidRequest;
-import de.mh.walter.boundary.bean.KeyValidResponse;
-import de.mh.walter.boundary.bean.LoginRequest;
-import de.mh.walter.boundary.bean.LoginResponse;
 import de.mh.walter.boundary.bean.MarkTaskDoneRequest;
 import de.mh.walter.boundary.bean.UserOverview;
 import de.mh.walter.control.OverviewController;
@@ -17,27 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(path = "rest")
 public class RestInterface {
 
     @Autowired
-    OverviewController overviewController;
+    private OverviewController overviewController;
     @Autowired
-    TaskListManipulator taskListManipulator;
+    private TaskListManipulator taskListManipulator;
     //
     private static final int TESTUSER = 1;
-
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody LoginRequest request) {
-        LoginResponse response = new LoginResponse();
-        response.setKey(null);
-        response.setMessage("not implemented yet");
-        return response;
-    }
-
-    @RequestMapping(path = "/key_valid", method = RequestMethod.POST)
-    public KeyValidResponse keyValid(@RequestBody KeyValidRequest request) {
-        return new KeyValidResponse(false);
-    }
 
     @RequestMapping(path = "/done_history", method = RequestMethod.GET)
     public UserOverview getDoneHistory() {

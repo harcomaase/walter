@@ -1,16 +1,16 @@
 package de.mh.walter.boundary.bean;
 
-public class LoginResponse {
+public class RegisterResponse {
 
-    private String key;
+    private boolean success;
     private String message;
 
-    public String getKey() {
-        return key;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getMessage() {

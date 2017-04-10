@@ -6,6 +6,11 @@
             body {
                 font-family: Sans-Serif;
             }
+            .greeting {
+                margin-bottom: 10px;
+                font-weight: bold;
+                font-size: large;
+            }
             table, td, th {
                 border: 1px solid grey;
             }
@@ -13,64 +18,119 @@
                 float:left;
                 margin: 10px;
             }
+            .hidden {
+                display: none;
+            }
         </style>
     </head>
     <body>
         <div id="content">
-            <div id="greeting" style="margin-bottom: 10px;">
+
+            <div id="greeting" class="greeting">
                 hi
                 <span id="greeting_name"></span>
             </div>
 
-            <div id="newTasklist_area">
-                <form onsubmit="return false;">
-                    <input type="text" id="input_newTasklistName" />
-                    <button type="submit" onclick="createNewTasklist();">create new tasklist</button>
-                    |
-                    <button type="button" onclick="showDoneHistory();">history</button>
-                </form>
-            </div>
-            <hr />
-
-            <div id="newTask_area">
-                <form onsubmit="return false;">
-                    <select id="select_newTask">
-                    </select>
-                    <input type="text" id="input_newTaskText" />
-                    <button type="submit" onclick="createNewTask();">add to tasklist</button>
-                </form>
+            <div id="login_view" class="hidden">
+                <fieldset>
+                    <legend>login</legend>
+                    <form onsubmit="return false;">
+                        <input type="text" id="input_login_username" />
+                        <input type="password" id="input_login_password" />
+                        <button type="submit" onclick="login();">login</button>
+                    </form>
+                </fieldset>
                 <hr />
+                <fieldset>
+                    <legend>register</legend>
+                    <form onsubmit="return false;">
+                        <input type="text" id="input_register_username" />
+                        <input type="password" id="input_register_password" />
+                        <button type="submit" onclick="register();">register</button>
+                    </form>
+                </fieldset>
             </div>
 
-            <div id="tasklist_area">
+            <div id="main_view" class="hidden">
 
+                <div id="newTasklist_area">
+                    <form onsubmit="return false;">
+                        <input type="text" id="input_newTasklistName" />
+                        <button type="submit" onclick="createNewTasklist();">create new tasklist</button>
+                        |
+                        <button type="button" onclick="showDoneHistory();">history</button>
+                    </form>
+                </div>
+                <hr />
+
+                <div id="newTask_area">
+                    <form onsubmit="return false;">
+                        <select id="select_newTask">
+                        </select>
+                        <input type="text" id="input_newTaskText" />
+                        <button type="submit" onclick="createNewTask();">add to tasklist</button>
+                    </form>
+                    <hr />
+                </div>
+
+                <div id="tasklist_area">
+
+                </div>
             </div>
         </div>
 
         <script type="text/javascript">
-            var REST_OVERVIEW = 'overview';
-            var REST_CREATE_TASKLIST = 'create_list';
-            var REST_CREATE_TASK = 'create_task';
-            var REST_MARK_TASK_DONE = 'mark_task_done';
-            var REST_UNMARK_TASK_DONE = 'unmark_task_done';
-            var REST_DONE_HISTORY = 'done_history';
+            var REST_BASE = 'rest/';
+            var REST_HI = REST_BASE + 'hi';
+            var REST_OVERVIEW = REST_BASE + 'overview';
+            var REST_CREATE_TASKLIST = REST_BASE + 'create_list';
+            var REST_CREATE_TASK = REST_BASE + 'create_task';
+            var REST_MARK_TASK_DONE = REST_BASE + 'mark_task_done';
+            var REST_UNMARK_TASK_DONE = REST_BASE + 'unmark_task_done';
+            var REST_DONE_HISTORY = REST_BASE + 'done_history';
+            var REST_REGISTER = REST_BASE + 'register';
+            var REST_LOGIN = REST_BASE + 'login';
             var overview;
 
-            initUser();
-            showStuff();
+            if (initUser()) {
+                showStuff();
+            }
 
             function initUser() {
                 var storage = window.localStorage;
                 var key = storage.getItem('key');
-                if(key) {
-                    //verify key
+                if (key) {
+                    var hiResponse = httpGet(REST_HI, key);
+                    if (hiResponse === 'hi') {
+                        alert('welcome back');
+                        return true;
+                    }
                 }
-                var user = prompt('user:');
-                var password = prompt('password:');
-                //request key
+                showView('login_view');
+            }
+
+            function register() {
+                var username = byId('input_register_username').value;
+                var password = byId('input_register_password').value;
+
+                var data = {username: username, password: password};
+                alert(httpPost(REST_REGISTER, data));
+            }
+
+            function login() {
+
+            }
+
+            function showView(view) {
+                byId(view).classList.remove('hidden');
+            }
+
+            function hideView(view) {
+                byId(view).classList.add('hidden');
             }
 
             function showStuff() {
+                showView('main_view');
                 updateOverview();
                 updateInputArea();
             }
@@ -194,9 +254,12 @@
                 }
             }
 
-            function httpGet(url) {
+            function httpGet(url, key) {
                 var request = new XMLHttpRequest();
                 request.open('GET', url, false);
+                if (key) {
+                    request.setRequestHeader('Authorization', key);
+                }
                 request.send();
                 return request.responseText;
             }

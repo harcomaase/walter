@@ -10,6 +10,7 @@ public class SpringBootMain {
     //TODO: implement tarpit and/or quota mechanism
     //TODO: extract register validation
     //TODO: replace system.out with proper logging
+    //TODO: allow multiple keys per user (current implementation is dumb)
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMain.class, args);
     }

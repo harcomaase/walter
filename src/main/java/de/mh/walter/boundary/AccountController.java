@@ -4,6 +4,7 @@ import de.mh.walter.boundary.bean.LoginRequest;
 import de.mh.walter.boundary.bean.LoginResponse;
 import de.mh.walter.boundary.bean.RegisterRequest;
 import de.mh.walter.boundary.bean.RegisterResponse;
+import de.mh.walter.control.Constants;
 import de.mh.walter.control.UserController;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "rest")
-public class LoginController {
+@RequestMapping(path = AccountController.API_PATH)
+public class AccountController {
 
     @Autowired
     private UserController userController;
     //
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9\\.\\-\\_]+@[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z0-9]{2,64}$");
+    public static final String API_PATH = Constants.API_LOCATION + "/account";
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public RegisterResponse register(@RequestBody RegisterRequest request) {

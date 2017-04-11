@@ -7,4 +7,5 @@ public final class Constants {
     }
     
     public static final Duration SHOW_DONE_TASKS_IN_OVERVIEW_FOR = Duration.ofMinutes(5);
+    public static final String API_LOCATION = "/rest";
 }

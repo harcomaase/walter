@@ -91,16 +91,15 @@
             var REST_REGISTER = REST_BASE + 'register';
             var REST_LOGIN = REST_BASE + 'login';
             var overview;
+            var storage = window.localStorage;
 
             if (initUser()) {
                 showStuff();
             }
 
             function initUser() {
-                var storage = window.localStorage;
-                var key = storage.getItem('key');
-                if (key) {
-                    var hiResponse = httpGet(REST_HI, key);
+                if (getKey()) {
+                    var hiResponse = httpGet(REST_HI);
                     if (hiResponse === 'hi') {
                         alert('welcome back');
                         return true;
@@ -114,11 +113,22 @@
                 var password = byId('input_register_password').value;
 
                 var data = {username: username, password: password};
-                alert(httpPost(REST_REGISTER, data));
+                alert(httpPost(REST_REGISTER, data, true));
             }
 
             function login() {
+                var username = byId('input_login_username').value;
+                var password = byId('input_login_password').value;
 
+                var data = {username: username, password: password};
+                var response = JSON.parse(httpPost(REST_LOGIN, data, true));
+                if (response.message === 'OK' && response.key) {
+                    storage.setItem('key', response.key);
+                    hideView('login_view');
+                    showStuff();
+                    return;
+                }
+                alert(response.message);
             }
 
             function showView(view) {
@@ -254,22 +264,29 @@
                 }
             }
 
-            function httpGet(url, key) {
+            function httpGet(url, ignoreKey) {
                 var request = new XMLHttpRequest();
                 request.open('GET', url, false);
-                if (key) {
-                    request.setRequestHeader('Authorization', key);
+                if (ignoreKey !== true) {
+                    request.setRequestHeader('Authorization', getKey());
                 }
                 request.send();
                 return request.responseText;
             }
 
-            function httpPost(url, data) {
+            function httpPost(url, data, ignoreKey) {
                 var request = new XMLHttpRequest();
                 request.open('POST', url, false);
+                if (ignoreKey !== true) {
+                    request.setRequestHeader('Authorization', getKey());
+                }
                 request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
                 request.send(JSON.stringify(data));
                 return request.responseText;
+            }
+            
+            function getKey() {
+                return storage.getItem('key');
             }
 
             function byId(e) {

@@ -3,11 +3,11 @@ package de.mh.walter.boundary;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class LoginControllerTest {
+public class AccountControllerTest {
     
     @Test
     public void testValidEmailAddress() {
-        LoginController instance = new LoginController();
+        AccountController instance = new AccountController();
         
         assertTrue(instance.validEmailAddress("test@example.com"));
         assertTrue(instance.validEmailAddress("test.test@example.com"));

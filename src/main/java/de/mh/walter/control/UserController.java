@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserController {
 
-    private static final int KEY_SIZE = 16;
+    private static final int KEY_SIZE = 32;
     private static final int SALT_ROUNDS = 10;
 
     @Autowired
@@ -21,7 +21,6 @@ public class UserController {
         String salt = BCrypt.gensalt(SALT_ROUNDS);
         String hash = BCrypt.hashpw(password, salt);
         User user = new User();
-        user.setAuthenticationKey(null);
         user.setEmail(username);
         user.setPassword(hash);
         userDao.create(user);
@@ -52,8 +51,7 @@ public class UserController {
         byte[] buffer = new byte[KEY_SIZE];
         random.nextBytes(buffer);
         String key = Base64.getEncoder().encodeToString(buffer);
-        user.setAuthenticationKey(key);
-        userDao.update(user);
+        userDao.addKeyToUser(user, key);
         return key;
     }
 }

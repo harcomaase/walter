@@ -16,7 +16,6 @@ public class User {
     private String email;
     @NotNull
     private String password;
-    private String authenticationKey;
 
     public Long getId() {
         return id;
@@ -40,13 +39,5 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAuthenticationKey() {
-        return authenticationKey;
-    }
-
-    public void setAuthenticationKey(String authenticationKey) {
-        this.authenticationKey = authenticationKey;
     }
 }

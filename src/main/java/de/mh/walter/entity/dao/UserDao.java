@@ -1,6 +1,8 @@
 package de.mh.walter.entity.dao;
 
 import de.mh.walter.entity.User;
+import de.mh.walter.entity.UserAuthKey;
+import de.mh.walter.entity.repository.UserAuthKeyRepository;
 import de.mh.walter.entity.repository.UserRepository;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +14,8 @@ public class UserDao {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserAuthKeyRepository userAuthKeyRepository;
 
     public User find(long userId) {
         return userRepository.findOne(userId);
@@ -30,7 +34,18 @@ public class UserDao {
     }
 
     public User findByKey(String key) {
-        return userRepository.findByAuthenticationKey(key);
+        UserAuthKey userAuthkey = userAuthKeyRepository.findByAuthenticationKey(key);
+        if(userAuthkey == null) {
+            return null;
+        }
+        return userRepository.findOne(userAuthkey.getUserId());
+    }
+    
+    public void addKeyToUser(User user, String key) {
+        UserAuthKey userAuthKey = new UserAuthKey();
+        userAuthKey.setAuthenticationKey(key);
+        userAuthKey.setUserId(user.getId());
+        userAuthKeyRepository.save(userAuthKey);
     }
 
     public List<User> findAll() {

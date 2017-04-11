@@ -11,7 +11,7 @@ public class SpringBootMain {
     //TODO: extract register validation
     //TODO: extract auth need path check
     //TODO: replace system.out with proper logging
-    //TODO: allow multiple keys per user (current implementation is dumb) -> remove old ones?
+    //TODO: user auth keys -> remove old ones?
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMain.class, args);
     }

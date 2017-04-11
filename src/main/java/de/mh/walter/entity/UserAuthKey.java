@@ -15,6 +15,8 @@ public class UserAuthKey {
     private long userId;
     @Column(unique = true)
     private String authenticationKey;
+    private long issued;
+    private long lastUse;
 
     public Long getId() {
         return id;
@@ -38,5 +40,21 @@ public class UserAuthKey {
 
     public void setAuthenticationKey(String authenticationKey) {
         this.authenticationKey = authenticationKey;
+    }
+
+    public long getIssued() {
+        return issued;
+    }
+
+    public void setIssued(long issued) {
+        this.issued = issued;
+    }
+
+    public long getLastUse() {
+        return lastUse;
+    }
+
+    public void setLastUse(long lastUse) {
+        this.lastUse = lastUse;
     }
 }

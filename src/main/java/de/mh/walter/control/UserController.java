@@ -54,4 +54,8 @@ public class UserController {
         userDao.addKeyToUser(user, key);
         return key;
     }
+
+    public void removeKey(String key) {
+        userDao.removeKey(key);
+    }
 }

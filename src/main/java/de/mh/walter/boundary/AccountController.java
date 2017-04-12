@@ -7,6 +7,7 @@ import de.mh.walter.boundary.bean.RegisterResponse;
 import de.mh.walter.control.Constants;
 import de.mh.walter.control.UserController;
 import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ public class AccountController {
     public RegisterResponse register(@RequestBody RegisterRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
-        
+
         System.out.println("register request for user: " + username);
 
         if (username == null || username.length() < 5 || !validEmailAddress(username) || userController.userExists(username)) {
@@ -72,6 +73,15 @@ public class AccountController {
             return response;
         }
         return error("unauthorized");
+    }
+
+    @RequestMapping(path = "/logout", method = RequestMethod.POST)
+    public void logout(HttpServletRequest request) {
+        String key = request.getHeader("Authorization");
+        if (key == null) {
+            return;
+        }
+        userController.removeKey(key);
     }
 
     private LoginResponse error(String message) {

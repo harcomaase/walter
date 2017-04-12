@@ -92,6 +92,7 @@
             var REST_DONE_HISTORY = REST_BASE + 'done_history';
             var REST_REGISTER = REST_BASE + 'account/register';
             var REST_LOGIN = REST_BASE + 'account/login';
+            var REST_LOGOUT = REST_BASE + 'account/logout';
             var overview;
             var storage = window.localStorage;
 
@@ -134,8 +135,9 @@
             }
             
             function logout() {
-                storage.removeItem('key');
                 byId('greeting_name').textContent = null;
+                httpPost(REST_LOGOUT, {});
+                storage.removeItem('key');
                 hideView('main_view');
                 showView('login_view');
             }

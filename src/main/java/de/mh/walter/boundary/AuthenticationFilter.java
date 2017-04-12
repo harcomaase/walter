@@ -4,7 +4,6 @@ import de.mh.walter.control.Constants;
 import de.mh.walter.control.UserController;
 import de.mh.walter.entity.User;
 import java.io.IOException;
-import java.util.Map;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -35,6 +34,7 @@ public class AuthenticationFilter implements Filter {
         }
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String pathInfo = httpRequest.getPathInfo();
+        System.out.println("resource requested: " + pathInfo);
         if (pathInfo == null) {
             sendError(response, 400);
             return;
@@ -63,16 +63,16 @@ public class AuthenticationFilter implements Filter {
     }
 
     private boolean authorized(HttpServletRequest httpRequest) {
-        System.out.println("authentication request!");
         String authorizationHeader = httpRequest.getHeader("Authorization");
         if (authorizationHeader == null || authorizationHeader.isEmpty()) {
             return false;
         }
         User user = userController.findUserByKey(authorizationHeader);
-        System.out.println("found user " + user.getEmail() + " by key :)");
         if (user == null) {
+            System.out.println("no user found for key: " + authorizationHeader);
             return false;
         }
+        System.out.println("found user " + user.getEmail() + " by key :)");
         httpRequest.setAttribute("user", user);
         return true;
     }

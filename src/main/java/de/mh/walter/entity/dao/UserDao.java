@@ -67,4 +67,11 @@ public class UserDao {
         userRepository.findAll().forEach(result::add);
         return result;
     }
+
+    public void removeKey(String key) {
+        UserAuthKey userAuthKey = userAuthKeyRepository.findByAuthenticationKey(key);
+        if (userAuthKey != null) {
+            userAuthKeyRepository.delete(userAuthKey);
+        }
+    }
 }

@@ -1,5 +1,6 @@
-package de.mh.walter.boundary;
+package de.mh.walter.boundary.filter;
 
+import de.mh.walter.boundary.AccountController;
 import de.mh.walter.control.Constants;
 import de.mh.walter.control.UserController;
 import de.mh.walter.entity.User;
@@ -13,8 +14,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+@Order(2)
 @Component
 public class AuthenticationFilter implements Filter {
 
@@ -60,6 +63,7 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void destroy() {
+        System.out.println("bye from " + this.getClass().getSimpleName());
     }
 
     private boolean authorized(HttpServletRequest httpRequest) {

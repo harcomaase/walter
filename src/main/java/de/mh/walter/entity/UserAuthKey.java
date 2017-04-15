@@ -13,6 +13,7 @@ public class UserAuthKey {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private long userId;
+    private String applicationName;
     @Column(unique = true)
     private String authenticationKey;
     private long issued;
@@ -32,6 +33,14 @@ public class UserAuthKey {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
     public String getAuthenticationKey() {

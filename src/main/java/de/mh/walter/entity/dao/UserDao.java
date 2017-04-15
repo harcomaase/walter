@@ -48,10 +48,11 @@ public class UserDao {
         return userRepository.findOne(userAuthkey.getUserId());
     }
 
-    public void addKeyToUser(User user, String key) {
+    public void addKeyToUser(User user, String key, String applicationName) {
         UserAuthKey userAuthKey = new UserAuthKey();
         userAuthKey.setAuthenticationKey(key);
         userAuthKey.setUserId(user.getId());
+        userAuthKey.setApplicationName(applicationName);
         long now = now();
         userAuthKey.setIssued(now);
         userAuthKey.setLastUse(now);

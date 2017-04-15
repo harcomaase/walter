@@ -42,20 +42,31 @@ public class UserController {
         return userDao.findByKey(key);
     }
 
-    public String createAndPersistKey(String username) {
+    public String createAndPersistKey(String username, String applicationName) {
         User user = userDao.findByUsername(username);
         if (user == null) {
             return null;
         }
+
         Random random = new Random();
         byte[] buffer = new byte[KEY_SIZE];
         random.nextBytes(buffer);
         String key = Base64.getEncoder().encodeToString(buffer);
-        userDao.addKeyToUser(user, key);
+        userDao.addKeyToUser(user, key, createValidName(applicationName));
         return key;
     }
 
     public void removeKey(String key) {
         userDao.removeKey(key);
+    }
+
+    private String createValidName(String applicationName) {
+        if (applicationName == null || applicationName.isEmpty()) {
+            return null;
+        }
+        if (applicationName.length() > 64) {
+            return applicationName.substring(0, 64);
+        }
+        return applicationName;
     }
 }

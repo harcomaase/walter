@@ -31,7 +31,7 @@ public class AccountController {
 
         System.out.println("register request for user: " + username);
 
-        if (username == null || username.length() < 5 || !validEmailAddress(username) || userController.userExists(username)) {
+        if (username == null || username.length() < 5 || username.length() > 255 || !validEmailAddress(username) || userController.userExists(username)) {
             RegisterResponse errorResponse = new RegisterResponse();
             errorResponse.setMessage("invalid username");
             errorResponse.setSuccess(false);
@@ -58,12 +58,13 @@ public class AccountController {
     public LoginResponse login(@RequestBody LoginRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
+        String applicationName = request.getApplicationName();
         System.out.println("login request for user: " + username);
         if (username == null || password == null) {
             return error("invalid input");
         }
         if (userController.checkPassword(username, password)) {
-            String key = userController.createAndPersistKey(username);
+            String key = userController.createAndPersistKey(username, applicationName);
             if (key == null) {
                 return error("strange things happen");
             }

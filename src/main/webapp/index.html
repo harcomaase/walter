@@ -2,6 +2,8 @@
 <html>
     <head>
         <title>walter</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
             body {
                 font-family: Sans-Serif;
@@ -122,8 +124,9 @@
             function login() {
                 var username = byId('input_login_username').value;
                 var password = byId('input_login_password').value;
+                var applicationName = 'walter webpage';
 
-                var data = {username: username, password: password};
+                var data = {username: username, password: password, applicationName: applicationName};
                 var response = JSON.parse(httpPost(REST_LOGIN, data, true));
                 if (response.message === 'OK' && response.key) {
                     storage.setItem('key', response.key);
@@ -133,7 +136,7 @@
                 }
                 alert(response.message);
             }
-            
+
             function logout() {
                 byId('greeting_name').textContent = null;
                 httpPost(REST_LOGOUT, {});
@@ -295,7 +298,7 @@
                 request.send(JSON.stringify(data));
                 return request.responseText;
             }
-            
+
             function getKey() {
                 return storage.getItem('key');
             }

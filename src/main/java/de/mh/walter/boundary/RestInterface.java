@@ -60,10 +60,10 @@ public class RestInterface {
     public UserOverview getOverview() {
         return overviewController.getOverviewForUser(getUserId());
     }
-    
+
     private long getUserId() {
-        User user = (User)request.getAttribute("user");
-        if(user == null) {
+        User user = (User) request.getAttribute("user");
+        if (user == null) {
             throw new IllegalStateException("no user found");
         }
         return user.getId();

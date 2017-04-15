@@ -20,6 +20,8 @@ public class AccountController {
 
     @Autowired
     private UserController userController;
+    @Autowired
+    private HttpServletRequest httpServletRequest;
     //
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9\\.\\-\\_]+@[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z0-9]{2,64}$");
     public static final String API_PATH = Constants.API_LOCATION + "/account";
@@ -56,6 +58,9 @@ public class AccountController {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody LoginRequest request) {
+        if (!Tarpit.tarpitOk(httpServletRequest)) {
+            return error("you have to wait before trying again");
+        }
         String username = request.getUsername();
         String password = request.getPassword();
         String applicationName = request.getApplicationName();
@@ -73,12 +78,13 @@ public class AccountController {
             response.setMessage("OK");
             return response;
         }
+        Tarpit.registerFailedAttempt(httpServletRequest);
         return error("unauthorized");
     }
 
     @RequestMapping(path = "/logout", method = RequestMethod.POST)
-    public void logout(HttpServletRequest request) {
-        String key = request.getHeader("Authorization");
+    public void logout() {
+        String key = httpServletRequest.getHeader("Authorization");
         if (key == null) {
             return;
         }

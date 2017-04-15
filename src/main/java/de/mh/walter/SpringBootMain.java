@@ -12,6 +12,7 @@ public class SpringBootMain {
     //TODO: extract auth need path check
     //TODO: replace system.out with proper logging
     //TODO: user auth keys -> remove old ones?
+    //TODO: user auth keys -> show in interface?
     public static void main(String[] args) {
         SpringApplication.run(SpringBootMain.class, args);
     }

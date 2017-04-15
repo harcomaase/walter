@@ -6,6 +6,8 @@ import de.mh.walter.boundary.bean.RegisterRequest;
 import de.mh.walter.boundary.bean.RegisterResponse;
 import de.mh.walter.control.Constants;
 import de.mh.walter.control.UserController;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,14 @@ public class AccountController {
     //
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9\\.\\-\\_]+@[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z0-9]{2,64}$");
     public static final String API_PATH = Constants.API_LOCATION + "/account";
+    private static final Logger LOG = Logger.getLogger(AccountController.class.getName());
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public RegisterResponse register(@RequestBody RegisterRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
 
-        System.out.println("register request for user: " + username);
+        LOG.log(Level.INFO, "register request for user: {0}", username);
 
         if (username == null || username.length() < 5 || username.length() > 255 || !validEmailAddress(username) || userController.userExists(username)) {
             RegisterResponse errorResponse = new RegisterResponse();
@@ -64,7 +67,7 @@ public class AccountController {
         String username = request.getUsername();
         String password = request.getPassword();
         String applicationName = request.getApplicationName();
-        System.out.println("login request for user: " + username);
+        LOG.log(Level.FINE, "login request for user: {0}", username);
         if (username == null || password == null) {
             return error("invalid input");
         }

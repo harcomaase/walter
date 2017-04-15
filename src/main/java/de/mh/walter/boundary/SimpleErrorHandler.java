@@ -1,6 +1,8 @@
 package de.mh.walter.boundary;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ public class SimpleErrorHandler implements ErrorController {
     private ErrorAttributes errorAttributes;
     //
     private static final String PATH = "/error";
+    private static final Logger LOG = Logger.getLogger(SimpleErrorHandler.class.getName());
 
     @Override
     public String getErrorPath() {
@@ -29,7 +32,7 @@ public class SimpleErrorHandler implements ErrorController {
     public String error(HttpServletRequest request, HttpServletResponse response) {
         String errorText = response.getStatus() + " / " + HttpStatus.valueOf(response.getStatus()).getReasonPhrase();
         Map<String, Object> errorMap = getErrorAttributes(request, false);
-        System.out.println("error occurred: " + errorText + "; error: " + errorMap.get("error") + "; message: " + errorMap.get("message") + "");
+        LOG.log(Level.WARNING, "error occurred: {0}; error: {1}; message: {2}", new Object[]{errorText, errorMap.get("error"), errorMap.get("message")});
         return errorText;
     }
 

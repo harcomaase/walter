@@ -5,6 +5,8 @@ import de.mh.walter.control.Constants;
 import de.mh.walter.control.UserController;
 import de.mh.walter.entity.User;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -23,10 +25,12 @@ public class AuthenticationFilter implements Filter {
 
     @Autowired
     UserController userController;
+    //
+    private static final Logger LOG = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("hi from " + this.getClass().getSimpleName());
+        LOG.log(Level.INFO, "hi from {0}", this.getClass().getSimpleName());
     }
 
     @Override
@@ -37,7 +41,7 @@ public class AuthenticationFilter implements Filter {
         }
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String pathInfo = httpRequest.getPathInfo();
-        System.out.println("resource requested: " + pathInfo);
+        LOG.log(Level.FINE, "resource requested: {0}", pathInfo);
         if (pathInfo == null) {
             sendError(response, 400);
             return;
@@ -63,7 +67,7 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void destroy() {
-        System.out.println("bye from " + this.getClass().getSimpleName());
+        LOG.log(Level.INFO, "bye from {0}", this.getClass().getSimpleName());
     }
 
     private boolean authorized(HttpServletRequest httpRequest) {
@@ -73,10 +77,10 @@ public class AuthenticationFilter implements Filter {
         }
         User user = userController.findUserByKey(authorizationHeader);
         if (user == null) {
-            System.out.println("no user found for key: " + authorizationHeader);
+            LOG.log(Level.INFO, "no user found for key: {0}", authorizationHeader);
             return false;
         }
-        System.out.println("found user " + user.getEmail() + " by key :)");
+        LOG.log(Level.FINE, "found user {0} by key :)", user.getEmail());
         httpRequest.setAttribute("user", user);
         return true;
     }

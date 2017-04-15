@@ -17,7 +17,7 @@ public class Tarpit {
     private static final Duration WAIT_TIME = Duration.ofMinutes(2L);
     //
     private static final Logger LOG = Logger.getLogger(Tarpit.class.getName());
-
+    
     public static boolean tarpitOk(HttpServletRequest request) {
         String id = extractIdentifier(request);
         LOG.log(Level.FINE, "checking tarpit for {0}", id);

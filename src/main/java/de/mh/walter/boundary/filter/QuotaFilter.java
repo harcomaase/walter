@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -23,11 +25,12 @@ public class QuotaFilter implements Filter {
     private static final Object LOCK = new Object();
     //
     private static final int MAX_REQUESTS_PER_MINUTE = 10 * 60;
+    private static final Logger LOG = Logger.getLogger(QuotaFilter.class.getName());
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         String remote = request.getRemoteAddr();
-        System.out.println("checking quota for: " + remote);
+        LOG.log(Level.FINE, "checking quota for: {0}", remote);
         synchronized (LOCK) {
             pruneRequestMap();
             if (!quotaOK(remote)) {
@@ -43,7 +46,7 @@ public class QuotaFilter implements Filter {
         if (now.get(Calendar.MINUTE) == lastReset.get(Calendar.MINUTE)) {
             return;
         }
-        System.out.println("pruning request map, size: " + IP2REQUESTS.size());
+        LOG.log(Level.FINE, "pruning request map, size: {0}", IP2REQUESTS.size());
         IP2REQUESTS.clear();
         lastReset = now;
     }
@@ -55,11 +58,11 @@ public class QuotaFilter implements Filter {
             return true;
         }
         if (requests > MAX_REQUESTS_PER_MINUTE) {
-            System.out.println("quota of " + MAX_REQUESTS_PER_MINUTE + " request per minute exceeded by: " + remote);
+            LOG.log(Level.INFO, "quota of {0} request per minute exceeded by: {1}", new Object[]{MAX_REQUESTS_PER_MINUTE, remote});
             return false;
         }
         int incremented = requests + 1;
-        System.out.println("request no. " + incremented + " by " + remote);
+        LOG.log(Level.FINE, "request no. {0} by {1}", new Object[]{incremented, remote});
         IP2REQUESTS.put(remote, incremented);
         return true;
     }
@@ -70,11 +73,11 @@ public class QuotaFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("hi from " + this.getClass().getSimpleName());
+        LOG.log(Level.INFO, "hi from {0}", this.getClass().getSimpleName());
     }
 
     @Override
     public void destroy() {
-        System.out.println("bye from " + this.getClass().getSimpleName());
+        LOG.log(Level.INFO, "bye from {0}", this.getClass().getSimpleName());
     }
 }

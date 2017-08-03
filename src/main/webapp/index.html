@@ -176,7 +176,7 @@
                 var text = '';
                 for (var n = 0; n < tasks.length; n += 1) {
                     var task = tasks[n];
-                    text += new Date(task.doneAt).toLocaleString() + ', [' + taskList.name + '] ' + task.text + '\n';
+                    text += new Date(task.doneAt).toLocaleString() + ', [' + task.taskList.name + '] ' + task.text + '\n';
                 }
                 alert(text);
             }
